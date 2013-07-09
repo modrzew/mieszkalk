@@ -26,6 +26,7 @@ mieszkalk = ($scope) ->
 		expenses:
 			names: []
 			values: {}
+			dont_split: {}
 		calculated: {}
 		total: {}
 		strings:
@@ -52,18 +53,24 @@ mieszkalk = ($scope) ->
 
 	$scope.toggleExpense = (person, expense) ->
 		if expense in $scope.model.people.disabled[person]
-			$scope.model.people.disabled[person].splice($scope.model.people.disabled[person], 1)
+			$scope.model.people.disabled[person].splice($scope.model.people.disabled[person].indexOf(expense), 1)
 		else
 			$scope.model.people.disabled[person].push(expense)
+	$scope.toggleSplit = (expense) ->
+		$scope.model.expenses.dont_split[expense] = !$scope.model.expenses.dont_split[expense]
 
 	recalculate = ->
 		# Check how many people have different expenses disabled
 		expenses_values = {}
 		for expense in $scope.model.expenses.names
+			# Populate dont_split, by the way
+			if not $scope.model.expenses.dont_split[expense]?
+				$scope.model.expenses.dont_split[expense] = false
 			divider = $scope.model.people.names.length
-			for person in $scope.model.people.names
-				if expense in $scope.model.people.disabled[person]
-					divider--
+			if not $scope.model.expenses.dont_split[expense]
+				for person in $scope.model.people.names
+					if expense in $scope.model.people.disabled[person]
+						divider--
 			expenses_values[expense] = $scope.model.expenses.values[expense] / divider
 		ret = {}
 		ret_total =
@@ -88,10 +95,18 @@ mieszkalk = ($scope) ->
 	loadFromLS = ->
 		if 'people' of @localStorage
 			people = JSON.parse(@localStorage['people'])
-			$scope.model.people = people
+			if 'names' of people
+				$scope.model.people.names = people.names
+			if 'disabled' of people
+				$scope.model.people.disabled = people.disabled
 			$scope.model.strings.people = people.names.join(', ')
 		if 'expenses' of @localStorage
 			expenses = JSON.parse(@localStorage['expenses'])
-			$scope.model.expenses = expenses
+			if 'names' of expenses
+				$scope.model.expenses.names = expenses.names
+			if 'values' of expenses
+				$scope.model.expenses.values = expenses.values
+			if 'dont_split' of expenses
+				$scope.model.expenses.dont_split = expenses.dont_split
 			$scope.model.strings.expenses = expenses.names.join(', ')
 	loadFromLS()

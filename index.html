@@ -2,7 +2,7 @@
 <html lang="en" ng-app="mieszkalk">
 <head>
 	<meta charset="UTF-8">
-	<title>Kalkulator Mieszkaniowy</title>
+	<title>Mieszkalk - and all your problems with splitting bills among locators are gone</title>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/angular-1.0.7.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
@@ -13,11 +13,28 @@
 </head>
 <body>
 	<div class="container" ng-controller="mieszkalk">
-		<div class="row">
-			<p>Locators (comma separated): <input class="input-xxlarge" type="text" ng-model="model.strings.people" /></p>
+		<div class="navbar navbar-fixed-top navbar-inverse">
+			<div class="navbar-inner">
+				<a href="#" class="brand">Mieszkalk</a>
+				<ul class="nav pull-right">
+					<li><a href="#" data-toggle="modal" data-target="#customizeModal">Customize</a></li>
+				</ul>
+			</div>
 		</div>
-		<div class="row">
-			<p>Expense categories (comma separated): <input class="input-xxlarge" type="text" ng-model="model.strings.expenses" /></p>
+		<div id="customizeModal" class="modal hide" role="dialog">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h3>Customization</h3>
+			</div>
+			<div class="modal-body">
+				<p>Locators (comma separated):</p>
+				<p><input class="input-block-level" type="text" ng-model="model.strings.people" /></p>
+				<p>Expense categories (comma separated):</p>
+				<p><input class="input-block-level" type="text" ng-model="model.strings.expenses" /></p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" data-dismiss="modal">Save</button>
+			</div>
 		</div>
 		<table class="table table-bordered table-condensed table-hover">
 			<thead>
@@ -29,12 +46,15 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="expense in model.expenses.names">
-					<td>{{ expense }}</td>
+					<td>
+						{{ expense }}
+					</td>
 					<td class="text-center">
 						<div class="input-append">
 							<input type="text" class="input-mini text-right" numberinput="" ng-model="model.expenses.values[expense]" />
 							<span class="add-on">zł</span>
 						</div>
+						<button class="btn add-on" ng-class="{'btn-info': model.expenses.dont_split[expense]}" ng-click="toggleSplit(expense)" title="if someone gets disabled, don't split among the rest, but leave original values">DS</button>
 					</td>
 					<td class="text-center" ng-repeat="person in model.people.names">
 						<div class="enable" ng-class="{disabled: model.people.disabled[person].indexOf(expense) >= 0}" ng-click="toggleExpense(person, expense)">

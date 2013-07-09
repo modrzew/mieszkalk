@@ -1,3 +1,7 @@
+body {
+	padding-top: 50px;
+}
+
 .table tr td:first-child, .table tr th:first-child {
 	text-align: left;
 }
@@ -6,7 +10,7 @@
 	text-align: center;
 }
 .value {
-	width: 10em;
+	width: 12em;
 }
 .enable {
 	cursor: pointer;
@@ -14,4 +18,10 @@
 }
 .enable.disabled {
 	opacity: 0.1;
+}
+.input-append {
+	margin-bottom: 0;
+}
+.navbar .navbar-inner {
+	padding: 0 20px;
 }
