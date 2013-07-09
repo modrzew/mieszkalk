@@ -1,0 +1,17 @@
+.table tr td:first-child, .table tr th:first-child {
+	text-align: left;
+}
+.table td, .table th {
+	vertical-align: middle;
+	text-align: center;
+}
+.value {
+	width: 10em;
+}
+.enable {
+	cursor: pointer;
+	text-align: center;
+}
+.enable.disabled {
+	opacity: 0.1;
+}

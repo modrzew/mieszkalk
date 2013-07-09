@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" ng-app="mieszkalk">
+<head>
+	<meta charset="UTF-8">
+	<title>Kalkulator Mieszkaniowy</title>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/angular-1.0.7.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="coffee/core.js"></script>
+	<link rel="stylesheet" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
+	<link rel="stylesheet" href="css/core.css" />
+</head>
+<body>
+	<div class="container" ng-controller="mieszkalk">
+		<div class="row">
+			<p>Locators (comma separated): <input class="input-xxlarge" type="text" ng-model="model.strings.people" /></p>
+		</div>
+		<div class="row">
+			<p>Expense categories (comma separated): <input class="input-xxlarge" type="text" ng-model="model.strings.expenses" /></p>
+		</div>
+		<table class="table table-bordered table-condensed table-hover">
+			<thead>
+				<tr>
+					<th class="pull-center">Expense</th>
+					<th class="value">Value</th>
+					<th ng-repeat="person in model.people.names">{{ person }}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="expense in model.expenses.names">
+					<td>{{ expense }}</td>
+					<td class="text-center">
+						<div class="input-append">
+							<input type="text" class="input-mini text-right" numberinput="" ng-model="model.expenses.values[expense]" />
+							<span class="add-on">zł</span>
+						</div>
+					</td>
+					<td class="text-center" ng-repeat="person in model.people.names">
+						<div class="enable" ng-class="{disabled: model.people.disabled[person].indexOf(expense) >= 0}" ng-click="toggleExpense(person, expense)">
+							{{ model.calculated[person][expense] | number:2 }} zł
+						</div>
+					</td>
+				</tr>
+			</tbody>
+			<thead>
+				<tr>
+					<th>Total</th>
+					<th class="text-center">{{ model.total['__all__'] | number:2 }} zł</th>
+					<th class="text-center" ng-repeat="person in model.people.names">
+						{{ model.total[person] | number:2 }} zł
+					</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</body>
+</html>
