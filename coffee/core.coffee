@@ -67,6 +67,9 @@ mieszkalk = ($scope) ->
 		$scope.model.expenses.dont_split[expense] = !$scope.model.expenses.dont_split[expense]
 
 	recalculate = ->
+		# Everything must be float, I don't care about performance
+		for name, expense of $scope.model.expenses.values
+			$scope.model.expenses.values[name] = parseFloat(expense, 10)
 		# Check how many people have different expenses disabled
 		expenses_values = {}
 		true_total = 0
