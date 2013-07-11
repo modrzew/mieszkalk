@@ -1,12 +1,12 @@
 body {
-	padding-top: 50px;
+	padding-top: 60px;
 }
 
 .table tr td:first-child, .table tr th:first-child {
 	text-align: left;
 }
 .table td, .table th {
-	vertical-align: middle;
+	vertical-align: middle !important;
 	text-align: center;
 }
 .value {
@@ -15,6 +15,7 @@ body {
 .enable {
 	cursor: pointer;
 	text-align: center;
+	height: 100%;
 }
 .enable.disabled {
 	opacity: 0.1;
@@ -24,4 +25,9 @@ body {
 }
 .navbar .navbar-inner {
 	padding: 0 20px;
+}
+small.gray {
+	display: block;
+	color: gray;
+	font-weight: normal;
 }

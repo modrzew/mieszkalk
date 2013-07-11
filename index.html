@@ -17,23 +17,31 @@
 			<div class="navbar-inner">
 				<a href="#" class="brand">Mieszkalk</a>
 				<ul class="nav pull-right">
-					<li><a href="#" data-toggle="modal" data-target="#customizeModal">Customize</a></li>
+					<li><a href="#" data-toggle="modal" data-target="#customizeModal"><i class="icon-wrench icon-white"></i> Customization &amp; <i class="icon-info-sign icon-white"></i> Help</a></li>
 				</ul>
 			</div>
 		</div>
 		<div id="customizeModal" class="modal hide" role="dialog">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">×</button>
-				<h3>Customization</h3>
+				<h3>Customization &amp; Help</h3>
 			</div>
 			<div class="modal-body">
 				<p>Locators (comma separated):</p>
 				<p><input class="input-block-level" type="text" ng-model="model.strings.people" /></p>
 				<p>Expense categories (comma separated):</p>
 				<p><input class="input-block-level" type="text" ng-model="model.strings.expenses" /></p>
+				<p>ProTips<sup>TM</sub>:</p>
+				<ul>
+					<li>Click on person's particular expense to disable it.</li>
+					<li><b>DS</b> (as in "don't split") mode will not split expense among the rest, in case someone gets disabled.</li>
+					<li>Github is so mainstream you can even <a href="https://github.com/modrzew/mieszkalk">fork this</a>. I don't exactly know why I'm doing this. And I don't know why you should fork this. But you can.</li>
+				</ul>
+				<p>Oh, and mandatory hipster badge:</p>
+				<h2 class="text-center">Created with ♥ in Wrocław</h2>
 			</div>
 			<div class="modal-footer">
-				<button class="btn btn-primary" data-dismiss="modal">Save</button>
+				<button class="btn btn-primary" data-dismiss="modal"><i class="icon-ok-sign icon-white"></i> OK, go away</button>
 			</div>
 		</div>
 		<table class="table table-bordered table-condensed table-hover">
@@ -57,7 +65,7 @@
 						<button class="btn add-on" ng-class="{'btn-info': model.expenses.dont_split[expense]}" ng-click="toggleSplit(expense)" title="if someone gets disabled, don't split among the rest, but leave original values">DS</button>
 					</td>
 					<td class="text-center" ng-repeat="person in model.people.names">
-						<div class="enable" ng-class="{disabled: model.people.disabled[person].indexOf(expense) >= 0}" ng-click="toggleExpense(person, expense)">
+						<div class="enable" title="click to toggle" ng-class="{disabled: model.people.disabled[person].indexOf(expense) >= 0}" ng-click="toggleExpense(person, expense)">
 							{{ model.calculated[person][expense] | number:2 }} zł
 						</div>
 					</td>
@@ -66,7 +74,10 @@
 			<thead>
 				<tr>
 					<th>Total</th>
-					<th class="text-center">{{ model.total['__all__'] | number:2 }} zł</th>
+					<th class="text-center">
+						{{ model.total['__all__'] | number:2 }} zł
+						<small class="gray" ng-show="model.unaccounted >= 0.01">{{ model.unaccounted | number:2 }} zł unaccounted</small>
+					</th>
 					<th class="text-center" ng-repeat="person in model.people.names">
 						{{ model.total[person] | number:2 }} zł
 					</th>

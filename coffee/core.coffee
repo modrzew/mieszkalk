@@ -22,13 +22,20 @@ mieszkalk = ($scope) ->
 	$scope.model =
 		people:
 			names: []
-			disabled: {}
+			disabled:
+				'Krzesłomir': ['Wungiel']
+				'Wierzchosława': ['Herbata']
 		expenses:
 			names: []
-			values: {}
-			dont_split: {}
+			values:
+				'Prąd': 15.67,
+				'Wungiel': 20,
+				'Herbata': 84
+			dont_split:
+				'Wungiel': true
 		calculated: {}
 		total: {}
+		unaccounted: 10
 		strings:
 			people: 'Pankracy, Krzesłomir, Wierzchosława'
 			expenses: 'Czynsz, Prąd, Wungiel, Herbata, Wywóz śmieci'
@@ -62,7 +69,9 @@ mieszkalk = ($scope) ->
 	recalculate = ->
 		# Check how many people have different expenses disabled
 		expenses_values = {}
+		true_total = 0
 		for expense in $scope.model.expenses.names
+			true_total += $scope.model.expenses.values[expense]
 			# Populate dont_split, by the way
 			if not $scope.model.expenses.dont_split[expense]?
 				$scope.model.expenses.dont_split[expense] = false
@@ -86,6 +95,7 @@ mieszkalk = ($scope) ->
 			ret_total['__all__'] += total
 		$scope.model.calculated = ret
 		$scope.model.total = ret_total
+		$scope.model.unaccounted = true_total - ret_total['__all__']
 		# Save to localStorage
 		saveToLS()
 
