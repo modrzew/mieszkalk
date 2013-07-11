@@ -67,14 +67,14 @@ mieszkalk = ($scope) ->
 		$scope.model.expenses.dont_split[expense] = !$scope.model.expenses.dont_split[expense]
 
 	recalculate = ->
-		# Everything must be float, I don't care about performance
-		for name, expense of $scope.model.expenses.values
-			$scope.model.expenses.values[name] = parseFloat(expense, 10)
 		# Check how many people have different expenses disabled
 		expenses_values = {}
 		true_total = 0
-		for expense in $scope.model.expenses.names
-			true_total += $scope.model.expenses.values[expense]
+		for expense, value of $scope.model.expenses.values
+			value = parseFloat(value, 10)
+			if isNaN(value)
+				value = 0
+			true_total += value
 			# Populate dont_split, by the way
 			if not $scope.model.expenses.dont_split[expense]?
 				$scope.model.expenses.dont_split[expense] = false
@@ -83,7 +83,7 @@ mieszkalk = ($scope) ->
 				for person in $scope.model.people.names
 					if expense in $scope.model.people.disabled[person]
 						divider--
-			expenses_values[expense] = $scope.model.expenses.values[expense] / divider
+			expenses_values[expense] = value / divider
 		ret = {}
 		ret_total =
 			__all__: 0
@@ -118,6 +118,12 @@ mieszkalk = ($scope) ->
 			if 'names' of expenses
 				$scope.model.expenses.names = expenses.names
 			if 'values' of expenses
+				# Convert to float first!
+				for expense, value of expenses.values
+					value = parseFloat(value, 10)
+					if isNaN(value)
+						value = 0
+					expenses.values[expense] = value
 				$scope.model.expenses.values = expenses.values
 			if 'dont_split' of expenses
 				$scope.model.expenses.dont_split = expenses.dont_split
